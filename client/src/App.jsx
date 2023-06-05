@@ -5,7 +5,7 @@ import Auth from "./features/auth/Auth";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
-const authCookie = cookies.get("token");
+const authCookie = cookies.get("user");
 
 function App() {
 	return (

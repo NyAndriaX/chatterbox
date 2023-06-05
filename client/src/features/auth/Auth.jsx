@@ -3,15 +3,15 @@ import { TextField, Box, Button, Typography } from "@mui/material";
 import { validateForm } from "../../utils/authValidation";
 import { styled } from "@mui/system";
 import { RadioGroup, Radio, FormControlLabel } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login, signup } from "../../redux/authSlice";
 
 const initialState = {
 	name: "",
 	username: "",
 	sexe: "Male",
-	confirmPassword: "",
 	password: "",
+	confirmPassword: "",
 };
 
 const Input = styled(TextField)(({ theme }) => ({
@@ -20,6 +20,8 @@ const Input = styled(TextField)(({ theme }) => ({
 }));
 function Auth() {
 	const dispatch = useDispatch();
+	const errorRequest = useSelector((state) => state.auth.error);
+	const isLoading = useSelector((state) => state.auth.isLoading);
 	const [form, setForm] = useState(initialState);
 	const [isSignUp, setIsSignUp] = useState(false);
 	const [errors, setErrors] = React.useState({});
@@ -42,9 +44,9 @@ function Auth() {
 		setErrors(validationErrors);
 		if (Object.keys(validationErrors).length === 0) {
 			if (mode === "sign-in") {
-				// dispatch(login())
+				dispatch(login({ form }));
 			} else {
-				console.log("test");
+				dispatch(signup({ form }));
 			}
 		}
 	};
@@ -66,6 +68,12 @@ function Auth() {
 				</Typography>
 				<Typography variant="h5" mt={1} sx={{ fontWieght: "600" }}>
 					{isSignUp ? "Sign in to your account" : "Sign up the account"}
+				</Typography>
+				<Typography
+					variant="subtitle2"
+					mt={1}
+					sx={{ color: "red", textAlign: "center" }}>
+					{errorRequest}
 				</Typography>
 				<form onSubmit={handleSubmit} style={{ marginTop: "8px" }}>
 					{isSignUp && (
@@ -137,7 +145,7 @@ function Auth() {
 						onChange={handleChange}
 						error={!!errors.password}
 						helperText={errors.password}
-						label="enter your password*"
+						label="enter your confirmation password*"
 						fullWidth
 					/>
 					{isSignUp && (
@@ -158,7 +166,7 @@ function Auth() {
 						</>
 					)}
 					<Button type="submit" variant="contained" fullWidth>
-						{isSignUp ? "Sign-up" : "continue"}
+						{!isLoading ? (isSignUp ? "Sign-up" : "continue") : "loading ..."}
 					</Button>
 					<Box mt={2} sx={{ textAlign: "center" }}>
 						<Typography variant="caption">
