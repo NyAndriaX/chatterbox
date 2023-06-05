@@ -1,8 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { loginRequest, signupRequest } from "../api/authRequest";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 const initialState = {
-	user: null,
+	user: {},
 	isLoggedIn: false,
 	isLoading: false,
 	error: null,
@@ -12,9 +15,10 @@ export const login = createAsyncThunk(
 	"auth/login",
 	async (credentials, { rejectWithValue }) => {
 		try {
-			const { username, password } = credentials;
-			const response = await loginRequest(username, password);
-			return response.user;
+			const { email, password } = credentials.form;
+			const response = await loginRequest(email, password);
+			console.log(response);
+			return response;
 		} catch (error) {
 			return rejectWithValue(error.message);
 		}
@@ -25,8 +29,14 @@ export const signup = createAsyncThunk(
 	"auth/signup",
 	async (credentials, { rejectWithValue }) => {
 		try {
-			const { username, password } = credentials;
-			const response = await signupRequest(username, password);
+			const { name, username, email, sexe, password } = credentials.form;
+			const response = await signupRequest(
+				name,
+				username,
+				email,
+				sexe,
+				password
+			);
 			return response.user;
 		} catch (error) {
 			return rejectWithValue(error.message);
@@ -54,10 +64,12 @@ const authSlice = createSlice({
 				state.isLoading = false;
 				state.user = action.payload;
 				state.isLoggedIn = true;
+				cookies.set("user", state.user);
 			})
 			.addCase(login.rejected, (state, action) => {
 				state.isLoading = false;
 				state.error = action.payload;
+				console.log(state.error);
 			})
 			.addCase(signup.pending, (state) => {
 				state.isLoading = true;

@@ -10,6 +10,12 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// app.use(
+// 	cors({
+// 		origin: "http://localhost:5173/",
+// 		optionsSuccessStatusCode: 200,
+// 	})
+// );
 app.use("/api/userRequest", userRoute);
 
 app.listen(port, () => {
