@@ -1,1 +1,0 @@
-// fonctionnaliter de l'application

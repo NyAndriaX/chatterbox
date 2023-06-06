@@ -1,8 +1,8 @@
 import React from "react";
 import { Provider } from "react-redux";
-import store from "./redux/store";
-import Auth from "./features/auth/Auth";
+import store from "./store/configureStore";
 import Cookies from "universal-cookie";
+import Auth from "./pages/auth/auth";
 
 const cookies = new Cookies();
 const authCookie = cookies.get("user");

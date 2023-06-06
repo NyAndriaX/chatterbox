@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { TextField, Box, Button, Typography } from "@mui/material";
-import { validateForm } from "../../utils/authValidation";
+import { validateForm } from "./utils";
 import { styled } from "@mui/system";
 import { RadioGroup, Radio, FormControlLabel } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { login, signup } from "../../redux/authSlice";
+import { login, signup } from "../../store/reducers/authSlice";
 
 const initialState = {
 	name: "",

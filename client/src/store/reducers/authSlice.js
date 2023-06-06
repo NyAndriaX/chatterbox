@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loginRequest, signupRequest } from "../api/authRequest";
+import { loginRequest, signupRequest } from "../actions/authAction";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
