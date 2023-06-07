@@ -65,6 +65,7 @@ const authSlice = createSlice({
 				state.user = action.payload;
 				state.isLoggedIn = true;
 				cookies.set("user", state.user);
+				window.location.reload = "/";
 			})
 			.addCase(login.rejected, (state, action) => {
 				state.isLoading = false;

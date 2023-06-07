@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { TextField, Box, Button, Typography } from "@mui/material";
-import { validateForm } from "./utils";
+import { validationSchema } from "../validation/validationSchemaSignUp";
 import { styled } from "@mui/system";
 import { RadioGroup, Radio, FormControlLabel } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { login, signup } from "../../store/reducers/authSlice";
+import { signup } from "../../../store/reducers/authSlice";
+import { validateForm } from "../../../common/utils";
+import { Link } from "react-router-dom";
 
 const initialState = {
 	name: "",
@@ -18,36 +20,24 @@ const Input = styled(TextField)(({ theme }) => ({
 	marginTop: 5,
 	marginBottom: 5,
 }));
-function Auth() {
+
+function Signup() {
 	const dispatch = useDispatch();
 	const errorRequest = useSelector((state) => state.auth.error);
 	const isLoading = useSelector((state) => state.auth.isLoading);
 	const [form, setForm] = useState(initialState);
-	const [isSignUp, setIsSignUp] = useState(false);
 	const [errors, setErrors] = React.useState({});
 
 	const handleChange = (e) => {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
 
-	const SwitchMode = () => {
-		setIsSignUp((prevIsSignUp) => !prevIsSignUp);
-		setForm(initialState);
-		setErrors({});
-	};
-
-	const mode = isSignUp ? "sign-up" : "sign-in";
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const validationErrors = await validateForm(form, mode);
+		const validationErrors = await validateForm(form, validationSchema);
 		setErrors(validationErrors);
 		if (Object.keys(validationErrors).length === 0) {
-			if (mode === "sign-in") {
-				dispatch(login({ form }));
-			} else {
-				dispatch(signup({ form }));
-			}
+			dispatch(signup({ form }));
 		}
 	};
 
@@ -67,7 +57,7 @@ function Auth() {
 					Welcome back &#x270B;!
 				</Typography>
 				<Typography variant="h5" mt={1} sx={{ fontWieght: "600" }}>
-					{isSignUp ? "Sign in to your account" : "Sign up the account"}
+					Sign in to your account
 				</Typography>
 				<Typography
 					variant="subtitle2"
@@ -76,53 +66,47 @@ function Auth() {
 					{errorRequest}
 				</Typography>
 				<form onSubmit={handleSubmit} style={{ marginTop: "8px" }}>
-					{isSignUp && (
-						<>
-							<Typography variant="caption" fullWidth>
-								Name*
-							</Typography>
-							<Input
-								name="name"
-								value={form.name}
-								onChange={handleChange}
-								error={!!errors.name}
-								helperText={errors.name}
-								label="enter your name*"
-								fullWidth
+					<>
+						<Typography variant="caption" fullWidth>
+							Name*
+						</Typography>
+						<Input
+							name="name"
+							value={form.name}
+							onChange={handleChange}
+							error={!!errors.name}
+							helperText={errors.name}
+							label="enter your name*"
+							fullWidth
+						/>
+						<Typography variant="caption" fullWidth>
+							username*
+						</Typography>
+						<Input
+							name="username"
+							value={form.username}
+							onChange={handleChange}
+							error={!!errors.username}
+							helperText={errors.username}
+							label="enter your username*"
+							fullWidth
+						/>
+						<Typography variant="caption" fullWidth>
+							Sexe*
+						</Typography>
+						<RadioGroup
+							aria-label="gender"
+							name="sexe"
+							value={form.sexe}
+							onChange={handleChange}>
+							<FormControlLabel
+								value="female"
+								control={<Radio />}
+								label="female"
 							/>
-							<Typography variant="caption" fullWidth>
-								username*
-							</Typography>
-							<Input
-								name="username"
-								value={form.username}
-								onChange={handleChange}
-								error={!!errors.username}
-								helperText={errors.username}
-								label="enter your username*"
-								fullWidth
-							/>
-							<Typography variant="caption" fullWidth>
-								Sexe*
-							</Typography>
-							<RadioGroup
-								aria-label="gender"
-								name="sexe"
-								value={form.sexe}
-								onChange={handleChange}>
-								<FormControlLabel
-									value="female"
-									control={<Radio />}
-									label="female"
-								/>
-								<FormControlLabel
-									value="Male"
-									control={<Radio />}
-									label="Male"
-								/>
-							</RadioGroup>
-						</>
-					)}
+							<FormControlLabel value="Male" control={<Radio />} label="Male" />
+						</RadioGroup>
+					</>
 					<Typography variant="caption" fullWidth>
 						email*
 					</Typography>
@@ -148,35 +132,28 @@ function Auth() {
 						label="enter your confirmation password*"
 						fullWidth
 					/>
-					{isSignUp && (
-						<>
-							<Typography variant="caption" fullWidth>
-								Confirmation password*
-							</Typography>
-							<Input
-								name="confirmPassword"
-								type="password"
-								value={form.confirmPassword}
-								onChange={handleChange}
-								error={!!errors.confirmPassword}
-								helperText={errors.confirmPassword}
-								label="enter your confirmation password*"
-								fullWidth
-							/>
-						</>
-					)}
+					<Typography variant="caption" fullWidth>
+						Confirmation password*
+					</Typography>
+					<Input
+						name="confirmPassword"
+						type="password"
+						value={form.confirmPassword}
+						onChange={handleChange}
+						error={!!errors.confirmPassword}
+						helperText={errors.confirmPassword}
+						label="enter your confirmation password*"
+						fullWidth
+					/>
 					<Button type="submit" variant="contained" fullWidth>
-						{!isLoading ? (isSignUp ? "Sign-up" : "continue") : "loading ..."}
+						{!isLoading ? "Sign-up" : "loading ..."}
 					</Button>
 					<Box mt={2} sx={{ textAlign: "center" }}>
 						<Typography variant="caption">
 							Don't have an account{" "}
-							<Typography
-								variant="captione"
-								sx={{ color: "blue" }}
-								onClick={SwitchMode}>
-								{isSignUp ? "login" : "Sign up"}
-							</Typography>
+							<Link to="/" sx={{ color: "blue" }}>
+								Login
+							</Link>
 						</Typography>
 					</Box>
 				</form>
@@ -185,4 +162,4 @@ function Auth() {
 	);
 }
 
-export default Auth;
+export default Signup;
