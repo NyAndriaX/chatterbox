@@ -41,7 +41,15 @@ export const login = async (req, res) => {
 		const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
 			expiresIn: "1h",
 		});
+
 		const userConnect = user[0];
+
+		req.session.loggedIn = true;
+		req.session.user = {
+			id: userConnect.id,
+			username: userConnect.username,
+		};
+		// connectedUser.push(req.session.user);
 		return res.json({ token, userConnect });
 	} catch (error) {
 		console.error(error);
@@ -52,6 +60,7 @@ export const login = async (req, res) => {
 };
 
 export const signup = async (req, res) => {
+	console.log(req.body);
 	try {
 		const { name, username, sexe, email, password } = req.body;
 
@@ -100,4 +109,10 @@ export const signup = async (req, res) => {
 			.status(500)
 			.json({ message: "Une erreur s'est produite lors de l'inscription." });
 	}
+};
+
+export const usersOnline = (req, res) => {
+	if (req.session.loggedIn) return res.status(201).json(req.session);
+
+	return res.status(403).json({ message: "Pas d'utilisateur connecter" });
 };
