@@ -4,7 +4,7 @@ import { sendMessage } from "../controlleurs/processMessage.mjs";
 io.on("connection", (socket) => {
 	console.log("New Socket.IO connection:", socket.id);
 
-	socket.on("Sendmessage", async (data) => {
+	socket.on("sendmessage", async (data) => {
 		const { IdTeam, text } = data;
 
 		try {

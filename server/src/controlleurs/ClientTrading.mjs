@@ -78,6 +78,30 @@ export const deleteCustomerRequest = async (req, res) => {
 	}
 };
 
+//Friends
+export const getTeamMembersWithMessages = (req, res) => {
+	const { Uid } = req.params;
+	const query = `
+    SELECT u.id, u.name, u.username
+    FROM users u
+    JOIN CLI_TEAM t ON (u.id = t.IdSource AND t.IdDestinataire = ? OR u.id = t.IdDestinataire OR t.IdSource = ? )
+    JOIN CLI_Message m ON (t.id = m.IdTeam)
+		
+  `;
+
+	Connection.query(query, [Uid], (error, results) => {
+		if (error) {
+			console.error(
+				"Erreur lors de la récupération des utilisateurs membres de l'équipe : ",
+				error
+			);
+			res(error, null);
+		} else {
+			res(null, results);
+		}
+	});
+};
+
 export const validationCustomerRequest = async (req, res) => {
 	const { IdAsk } = req.params;
 	try {
@@ -159,7 +183,6 @@ export const getUsersNotFriends = async (req, res) => {
 
 		return res.status(201).json(result);
 	} catch (error) {
-		console.log(error);
 		return res.status(500).json({
 			message: "Une erreur s'est produite lors de la requete.",
 		});

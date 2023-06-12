@@ -40,9 +40,7 @@ export const receiveMessage = async (req, res) => {
 	}
 };
 
-export const sendMessage = async (req, res) => {
-	const { IdTeam, text } = req.body;
-
+export const sendMessage = async (req, res, IdTeam, text) => {
 	try {
 		if (!IdTeam) {
 			return res

@@ -20,12 +20,11 @@ const ComponentMessage = () => {
 				<Typography
 					variant="caption"
 					sx={{
-						color: "#A4A4A4",
+						color: "black",
 						backgroundColor: "#eaeaea",
 						pt: 0.7,
 						px: 1,
 						borderRadius: "10px",
-						color: "black",
 						fontSize: "12px",
 					}}>
 					Bonjours !

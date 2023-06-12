@@ -1,19 +1,19 @@
 import express from "express";
 import { AuthRoute } from "./routes/AuthRoute.mjs";
 import http from "http";
-import socketIO from "socket.io";
 import { tradingRoute } from "./routes/tradingRoute.mjs";
 import { processMessageRoute } from "./routes/processMessageRoute.mjs";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { config } from "dotenv";
 import sessionMiddleware from "./middleware/session.mjs";
+import { Server } from "socket.io";
 
 config();
 const app = express();
 const port = process.env.PORT || 5000;
 const server = http.createServer(app);
-export const io = socketIO(server);
+export const io = new Server(server);
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));

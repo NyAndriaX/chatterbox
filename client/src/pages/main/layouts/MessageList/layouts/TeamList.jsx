@@ -2,7 +2,8 @@ import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import Profile from "../../../../../assets/images/image-04.jpg";
 
-const TeamList = () => {
+const TeamList = (team) => {
+	console.log(team);
 	return (
 		<Box py={2} sx={{ display: "grid", justifyContent: "center" }}>
 			<Stack direction="row" justifyContent="space-between" spacing={2}>
