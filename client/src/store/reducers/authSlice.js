@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loginRequest, signupRequest } from "../api/authRequest";
+import { loginRequest, signupRequest } from "../actions/authAction";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
 const initialState = {
-	user: {},
+	user: cookies.get("user") || {},
 	isLoggedIn: false,
 	isLoading: false,
 	error: null,
@@ -17,7 +17,6 @@ export const login = createAsyncThunk(
 		try {
 			const { email, password } = credentials.form;
 			const response = await loginRequest(email, password);
-			console.log(response);
 			return response;
 		} catch (error) {
 			return rejectWithValue(error.message);
@@ -62,9 +61,10 @@ const authSlice = createSlice({
 			})
 			.addCase(login.fulfilled, (state, action) => {
 				state.isLoading = false;
-				state.user = action.payload;
 				state.isLoggedIn = true;
+				state.user = action.payload.userConnect;
 				cookies.set("user", state.user);
+				window.location.reload = `/`;
 			})
 			.addCase(login.rejected, (state, action) => {
 				state.isLoading = false;
