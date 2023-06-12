@@ -9,7 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Main = () => {
 	const dispatch = useDispatch();
-	const uid = useSelector((state) => state.auth.user.userConnect.id);
+	const uid = useSelector((state) => state.auth.user.id);
+	const [userDiscut, setUserDiscut] = React.useState(null);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -29,10 +30,10 @@ const Main = () => {
 				<SideBar />
 			</Grid>
 			<Grid xs={2.5}>
-				<MessageList />
+				<MessageList setUserDiscut={setUserDiscut} />
 			</Grid>
 			<Grid xs={6.2}>
-				<Message />
+				<Message userDiscut={userDiscut} />
 			</Grid>
 			<Grid xs={2.5}>
 				<CompanionShipeProfile />

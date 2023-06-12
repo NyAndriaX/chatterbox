@@ -3,7 +3,6 @@ import { Box, Stack, Typography } from "@mui/material";
 import Profile from "../../../../../assets/images/image-04.jpg";
 
 const TeamList = (team) => {
-	console.log(team);
 	return (
 		<Box py={2} sx={{ display: "grid", justifyContent: "center" }}>
 			<Stack direction="row" justifyContent="space-between" spacing={2}>
@@ -16,10 +15,10 @@ const TeamList = (team) => {
 					/>
 					<Stack direction="column">
 						<Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-							Elmer Laverty
+							{team.team?.name} {team.team?.username}
 						</Typography>
 						<Typography variant="caption" sx={{ color: "#A4A4A4" }}>
-							Bonjours!
+							{team.team?.text}
 						</Typography>
 						<Stack direction="row" spacing={1}>
 							<Typography

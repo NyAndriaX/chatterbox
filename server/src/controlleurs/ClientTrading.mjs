@@ -79,27 +79,47 @@ export const deleteCustomerRequest = async (req, res) => {
 };
 
 //Friends
-export const getTeamMembersWithMessages = (req, res) => {
+export const getTeamMembersWithMessages = async (req, res) => {
 	const { Uid } = req.params;
-	const query = `
-    SELECT u.id, u.name, u.username
-    FROM users u
-    JOIN CLI_TEAM t ON (u.id = t.IdSource AND t.IdDestinataire = ? OR u.id = t.IdDestinataire OR t.IdSource = ? )
-    JOIN CLI_Message m ON (t.id = m.IdTeam)
-		
-  `;
+	try {
+		const getAllusers = () => {
+			return new Promise((resolve, reject) => {
+				Connection.query(
+					`
+				SELECT DISTINCT u.name, u.username, u.id, u.email, m.text
+				FROM users u
+				JOIN CLI_MESSAGE m ON m.author = u.id
+				JOIN CLI_TEAM t1 ON t1.IdSource = u.id OR t1.IdDestinataire = u.id
+				JOIN CLI_TEAM t2 ON t2.IdSource = u.id OR t2.IdDestinataire = u.id
+				WHERE u.id <> ?
+				AND (t1.IdDestinataire = ? OR t2.IdSource = ?)
 
-	Connection.query(query, [Uid], (error, results) => {
-		if (error) {
-			console.error(
-				"Erreur lors de la récupération des utilisateurs membres de l'équipe : ",
-				error
-			);
-			res(error, null);
-		} else {
-			res(null, results);
+
+  `,
+					[Uid, Uid, Uid],
+					(error, results) => {
+						if (error) {
+							reject(error);
+						} else {
+							resolve(results);
+						}
+					}
+				);
+			});
+		};
+
+		const result = await getAllusers();
+
+		if (result.length === 0) {
+			return res.status(400).json({ message: "Pas de team pour l'instant" });
 		}
-	});
+
+		res.status(201).json(result);
+	} catch (error) {
+		return res.status(500).json({
+			message: "Une erreur s'est produite lors de la validation.",
+		});
+	}
 };
 
 export const validationCustomerRequest = async (req, res) => {

@@ -5,7 +5,7 @@ import MessageSearch from "./layouts/MessageSearch";
 import TeamList from "./layouts/TeamList";
 import { useSelector } from "react-redux";
 
-const MessageList = () => {
+const MessageList = ({ setUserDiscut }) => {
 	const error = useSelector((state) => state.members.error);
 	const team = useSelector((state) => state.members.membersTeam);
 
@@ -17,7 +17,13 @@ const MessageList = () => {
 				{error ? (
 					<p>{error}</p>
 				) : Array.isArray(team) ? (
-					team.map((list) => <TeamList key={list.id} team={list} />)
+					team.map((list) => (
+						<TeamList
+							key={list.id}
+							team={list}
+							onClick={(e) => setUserDiscut(list.id)}
+						/>
+					))
 				) : (
 					<p>No team members found.</p>
 				)}

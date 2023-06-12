@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
 import Profile from "../../../../../assets/images/image-04.jpg";
 
-const Headers = () => {
+const Headers = ({ company }) => {
 	return (
 		<Box sx={{ p: 2, borderBottom: "1px solid #eaeaea" }}>
 			<Stack direction="row" justifyContent="space-between" spacing={2}>
@@ -15,7 +15,7 @@ const Headers = () => {
 					/>
 					<Stack direction="column">
 						<Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-							Elmer Laverty
+							{company.name} {company.username}
 						</Typography>
 						<Typography variant="caption" sx={{ color: "#A4A4A4" }}>
 							en ligne il y a 12 m
