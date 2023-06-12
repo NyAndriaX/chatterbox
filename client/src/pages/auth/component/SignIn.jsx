@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../../store/reducers/authSlice";
 import { validationSchema } from "../validation/validationSchemaSignIn";
 import { validateForm } from "../../../common/utils";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const initialState = {
 	name: "",
